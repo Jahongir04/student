@@ -72,9 +72,10 @@ function formElements(e){
             .then(res=> {
                 output="";
                 head="";
-                window.location.reload();
-                document.getElementById("form").reset(); 
-            
+                let modalBody=document.getElementById('myModal');
+                modalBody.style.display='none';
+                modalBody.className='modal fade';
+                document.getElementById("form").reset();
             }
             )
             }
@@ -113,7 +114,7 @@ function ApiCall(pageNumber){
             <td>${data.content[i].region}</td>
             <td>${data.content[i].course}</td>
             `+
-            `<td><button type="submit" value="${data.content[i].name}" onclick="deleteFun('${data.content[i].id.toString()}')" class="btn btn-danger"><i class="fas fa-trash"></i></button></td></tr>`;
+            `<td><button type="submit" value="${data.content[i].name}" onclick="deleteFun('${data.content[i].id}')" class="btn btn-danger"><i class="fas fa-trash"></i></button></td></tr>`;
         }
         tbody.innerHTML=output;
     })
@@ -154,7 +155,7 @@ function searchTable(){
         <td>${returned[i].region}</td>
         <td>${returned[i].course}</td>
         `+
-        `<td><button type="submit" onclick="deleteFun('${returned[i].id.toString()}')" class="btn btn-danger"><i class="fas fa-trash"></i></button></td></tr>`;
+        `<td><button type="submit" onclick="deleteFun('${returned[i].id}')" class="btn btn-danger"><i class="fas fa-trash"></i></button></td></tr>`;
     }
     tbody.innerHTML=output;
   })
