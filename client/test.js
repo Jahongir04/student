@@ -72,9 +72,7 @@ function formElements(e){
             .then(res=> {
                 output="";
                 head="";
-                let modalBody=document.getElementById('myModal');
-                modalBody.style.display='none';
-                modalBody.className='modal fade';
+                window.location.reload();
                 document.getElementById("form").reset();
             }
             )
