@@ -1,13 +1,17 @@
 package uz.developer.student.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.developer.student.entity.StudentEntity;
 import uz.developer.student.payload.response.ApiResponse;
-import uz.developer.student.payload.response.ApiResponseStatus;
 import uz.developer.student.payload.CourseInterface;
 import uz.developer.student.payload.StudentDto;
 import uz.developer.student.repository.StudentRepositary;
@@ -22,9 +26,12 @@ import static uz.developer.student.payload.response.ApiResponseStatus.*;
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/student")
 public class StudentController {
+    private final MongoTemplate mongoTemplate;
     private final StudentRepositary studentRepositary;
 
-    public StudentController(StudentRepositary studentRepositary) {
+    @Autowired
+    public StudentController(MongoTemplate mongoTemplate, StudentRepositary studentRepositary) {
+        this.mongoTemplate = mongoTemplate;
         this.studentRepositary = studentRepositary;
     }
 
@@ -101,5 +108,16 @@ public class StudentController {
 
         studentRepositary.delete(student);
         return ResponseEntity.ok(SUCCESS);
+    }
+    @GetMapping("/page")
+    public Page<StudentEntity> searchTable(@RequestParam String search,@RequestParam int pageNumber,@RequestParam int pageSize){
+        Pageable pageable= PageRequest.of(pageNumber,pageSize);
+        Query query=new Query();
+        Criteria criteria=Criteria.where("name").regex(search);
+        long total = mongoTemplate.count(query, StudentEntity.class);
+        query.addCriteria(criteria).with(pageable);
+        List<StudentEntity> objects = mongoTemplate.find(query, StudentEntity.class);
+        Page<StudentEntity> page= new PageImpl<StudentEntity>(objects,pageable,total);
+        return page;
     }
 }
