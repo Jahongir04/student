@@ -113,11 +113,26 @@ public class StudentController {
     public Page<StudentEntity> searchTable(@RequestParam String search,@RequestParam int pageNumber,@RequestParam int pageSize){
         Pageable pageable= PageRequest.of(pageNumber,pageSize);
         Query query=new Query();
-        Criteria criteria=Criteria.where("name").regex(search);
-        long total = mongoTemplate.count(query, StudentEntity.class);
-        query.addCriteria(criteria).with(pageable);
+        Criteria criteria=new Criteria();
+        try {
+            int number=Integer.parseInt(search);
+            criteria.orOperator(Criteria.where("name")
+                    .regex(search),Criteria.where("surname")
+                    .regex(search),Criteria.where("fatherName")
+                    .regex(search),Criteria.where("region")
+                    .regex(search),Criteria.where("course").is(number));
+        }catch (Exception e){
+            criteria.orOperator(Criteria.where("name")
+                    .regex(search),Criteria.where("surname")
+                    .regex(search),Criteria.where("fatherName")
+                    .regex(search),Criteria.where("region")
+                    .regex(search));
+        }
+        query.addCriteria(criteria).with(pageable).skip(pageable.getPageSize() * pageable.getPageNumber())
+                .limit(pageable.getPageSize());;
         List<StudentEntity> objects = mongoTemplate.find(query, StudentEntity.class);
-        Page<StudentEntity> page= new PageImpl<StudentEntity>(objects,pageable,total);
+        long count = mongoTemplate.count(query.skip(-1).limit(-1),StudentEntity.class);
+        Page<StudentEntity> page= new PageImpl<StudentEntity>(objects,pageable,count);
         return page;
     }
 }
