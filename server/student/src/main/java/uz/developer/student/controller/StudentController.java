@@ -44,6 +44,7 @@ public class StudentController {
     }
 
     @GetMapping("/all")
+    @CrossOrigin(origins = "*")
     public List<StudentEntity> getStudentList(){
         return studentRepositary.findAll();
     }
