@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="cantainer">
+        <div class="row">
+            <div class="col-md-6 offset-3">
+                <h3 class="text-danger">Student Edit</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 offset-3">
+                <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+                    <div class="form-group">
+                      <label for="name">name</label>
+                      <div class="input-group">
+                        <input [(ngModel)]="student.name" id="name" name="name" required #name="ngModel" class="form-control">
+                      </div>
+                      <div class="alert alert-danger mt-2" *ngIf="!name.valid&&name.touched">malumot kiritish majburiy</div>
+                    </div>
+                    <div class="form-group">
+                      <label for="fatherName">fatherName</label>
+                      <div class="input-group">
+                        <input [(ngModel)]="student.fatherName" id="fatherName" name="fatherName" required #fatherName="ngModel" class="form-control">
+                      </div>
+                      <div class="alert alert-danger mt-2" *ngIf="!fatherName.valid&&fatherName.touched">malumot kiritish majburiy</div>
+                    </div>
+                    <div class="form-group">
+                      <label for="surname">surname</label>
+                      <div class="input-group">
+                        <input [(ngModel)]="student.surname" id="surname" name="surname" required #surname="ngModel" class="form-control">
+                      </div>
+                      <div class="alert alert-danger mt-2" *ngIf="!surname.valid&&surname.touched">malumot kiritish majburiy</div>
+                    </div>
+                    <div class="form-group">
+                      <label for="region">region</label>
+                      <div class="input-group">
+                        <input id="region" name="region" [(ngModel)]="student.region" required #region="ngModel" class="form-control">
+                      </div>
+                      <div class="alert alert-danger mt-2" *ngIf="!region.valid&&region.touched">malumot kiritish majburiy</div>
+                    </div>
+                    <div class="form-group">
+                      <label for="age">age</label>
+                      <div class="input-group">
+                        <input type="date" id="age" name="age" [(ngModel)]="student.age" required #age="ngModel" class="form-control">
+                      </div>
+                      <div class="alert alert-danger mt-2" *ngIf="!age.valid&&age.touched">malumot kiritish majburiy</div>
+                    </div>
+                    <div class="form-group">
+                      <label for="course">course</label>
+                      <select  id="course" name="course" [(ngModel)]="student.course" required #course="ngModel" class="form-control">
+                        <option value=1 selected>1</option>
+                        <option value=2>2</option>
+                        <option value=3>3</option>
+                        <option value=4>4</option>
+                      </select>
+                    </div>
+                    <button *ngIf="!f.invalid" class="btn btn-info" type="submit">Edit</button>
+                  </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

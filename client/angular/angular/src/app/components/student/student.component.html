@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script></head>
+
+<body>
+  <div class="container">
+    <div class="row mt-3 mb-3">
+      <div class="col-md-9">
+        <button class="btn btn-md btn-outline-primary" (click)="open(mymodal)"><i class="fa fa-user">Add student</i></button>
+    <ng-template #mymodal let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Create Student</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+          <div class="form-group">
+            <label for="name">name</label>
+            <div class="input-group">
+              <input ngModel id="name" name="name" required #name="ngModel" class="form-control">
+            </div>
+            <div class="alert alert-danger mt-2" *ngIf="!name.valid&&name.touched">malumot kiritish majburiy</div>
+          </div>
+          <div class="form-group">
+            <label for="fatherName">fatherName</label>
+            <div class="input-group">
+              <input ngModel id="fatherName" name="fatherName" required #fatherName="ngModel" class="form-control">
+            </div>
+            <div class="alert alert-danger mt-2" *ngIf="!fatherName.valid&&fatherName.touched">malumot kiritish majburiy</div>
+          </div>
+          <div class="form-group">
+            <label for="surname">surname</label>
+            <div class="input-group">
+              <input ngModel id="surname" name="surname" required #surname="ngModel" class="form-control">
+            </div>
+            <div class="alert alert-danger mt-2" *ngIf="!surname.valid&&surname.touched">malumot kiritish majburiy</div>
+          </div>
+          <div class="form-group">
+            <label for="region">region</label>
+            <div class="input-group">
+              <input id="region" name="region" ngModel required #region="ngModel" class="form-control">
+            </div>
+            <div class="alert alert-danger mt-2" *ngIf="!region.valid&&region.touched">malumot kiritish majburiy</div>
+          </div>
+          <div class="form-group">
+            <label for="age">age</label>
+            <div class="input-group">
+              <input type="date" id="age" name="age" ngModel required #age="ngModel" class="form-control">
+            </div>
+            <div class="alert alert-danger mt-2" *ngIf="!age.valid&&age.touched">malumot kiritish majburiy</div>
+          </div>
+          <div class="form-group">
+            <label for="course">course</label>
+            <select  id="course" name="course" ngModel required #course="ngModel" class="form-control">
+              <option value=1 selected>1</option>
+              <option value=2>2</option>
+              <option value=3>3</option>
+              <option value=4>4</option>
+            </select>
+          </div>
+          <button *ngIf="!f.invalid" class="btn btn-info" type="submit">submit</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>
+      </div>
+    </ng-template>
+      </div>
+      <div class="col-md-3">
+        <div class="input-group">
+            <div class="form-outline">
+              <input type="search" (change)="getSearchValue($event)" placeholder="Search..."  class="form-control m-right" />
+            </div>
+            <button type="button" class="btn btn-primary" (click)="searchTable()">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+    </div>
+    </div>
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>t/r</th>
+          <th>name</th>
+          <th>fatherName</th>
+          <th>surname</th>
+          <th>age</th>
+          <th>course</th>
+          <th>region</th>
+          <th>action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let friend of students index as i">
+          <td><span>{{i+1}}</span></td>
+          <td><span>{{friend.name}}</span></td>
+          <td><span>{{friend.fatherName}}</span></td>
+          <td><span>{{friend.surname}}</span></td>
+          <td><span>{{friend.age}}</span></td>
+          <td><span>{{friend.course}}</span></td>
+          <td><span>{{friend.region}}</span></td>
+          <td>
+            <div class="row">
+              <div class="col-md-6">
+                <a class="nav-link"[routerLink]="['/edit',friend._id]" routerLink="/edit"><button class="btn btn-sm btn-warning">
+                  <i class="fa fa-edit"></i>Edit</button></a>
+              </div>
+              <div class="col-md-6 mt-2">
+                <button class="btn btn-sm btn-danger" (click)="openDelete(contentDelete, friend)">
+                <i class="fa fa-remove"></i>Delete</button>
+              </div>
+            </div>
+            <ng-template #contentDelete let-modal>
+              <div class="modal-header">
+                <h4 class="modal-title">Confirm Delete</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <h2>Are you sure ?</h2>
+                  <button data-dismiss="modal" class="btn btn-danger" (click)="deleteStudent()">Yes, Delete!</button>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Cancel</button>
+              </div>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ul class="nav nav-pills">
+        <li *ngFor="let p of totalPages index as i" class="nav-item">
+          <span class="nav-link" href="#" [ngClass]="{'active': i+1==page}" (click)="setPage(i+1,$event)">{{i+1}} </span>
+        </li>
+    </ul>
+    <div class="text-right w-75 text-danger">
+      {{page}} page of {{totalPage}} pages
+    </div>
+
+  </div>
+</body>
+
+</html>
